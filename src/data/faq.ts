@@ -1,0 +1,74 @@
+import { FAQ } from '@/types';
+
+export const faqs: FAQ[] = [
+  {
+    id: 'faq-1',
+    question: 'What is the minimum order quantity (MOQ)?',
+    answer:
+      'Our standard MOQ is 1 unit for sample orders. For bulk orders, we recommend a minimum of 5 units to optimize shipping costs. Contact us for volume pricing.',
+    category: 'Ordering',
+  },
+  {
+    id: 'faq-2',
+    question: 'What certifications do your vehicles have?',
+    answer:
+      'Our vehicles are CE certified for European markets and EPA/DOT compliant for North America. We also hold ISO 9001:2015 quality management certification for our manufacturing processes.',
+    category: 'Certification',
+  },
+  {
+    id: 'faq-3',
+    question: 'What is the typical lead time for orders?',
+    answer:
+      'Standard models: 15-20 working days after deposit. Custom configurations: 25-35 working days. We maintain stock of popular models for faster delivery.',
+    category: 'Ordering',
+  },
+  {
+    id: 'faq-4',
+    question: 'Do you offer OEM/ODM services?',
+    answer:
+      'Yes, we provide full OEM/ODM services including custom colors, branding, seat configurations, and feature additions. Our R&D team can work with you on bespoke vehicle designs.',
+    category: 'OEM/ODM',
+  },
+  {
+    id: 'faq-5',
+    question: 'What warranty do you provide?',
+    answer:
+      'We offer a 2-year warranty on the frame and chassis, 1-year warranty on the motor and controller, and 1-year warranty on the battery. Extended warranty options are available.',
+    category: 'Warranty',
+  },
+  {
+    id: 'faq-6',
+    question: 'How are vehicles shipped internationally?',
+    answer:
+      'We ship via sea freight (FCL/LCL) from Shanghai or Ningbo port. Vehicles are carefully packed in steel frames or containers. We handle all export documentation and can arrange door-to-door delivery.',
+    category: 'Shipping',
+  },
+  {
+    id: 'faq-7',
+    question: 'What after-sales support do you provide?',
+    answer:
+      'We provide technical manuals, video tutorials, spare parts kits, and 24/7 online support. For large orders, we can send technicians for on-site training and maintenance support.',
+    category: 'Support',
+  },
+  {
+    id: 'faq-8',
+    question: 'Can the vehicles be customized with our company logo?',
+    answer:
+      'Absolutely! We offer custom livery, logo printing, and color matching services. We can also customize seat upholstery, canopy design, and accessory configurations.',
+    category: 'OEM/ODM',
+  },
+  {
+    id: 'faq-9',
+    question: 'What is the battery lifespan?',
+    answer:
+      'Lead-acid batteries typically last 3-4 years (500-800 cycles). Lithium batteries last 5-8 years (2000+ cycles). We offer replacement batteries and recycling services.',
+    category: 'Technical',
+  },
+  {
+    id: 'faq-10',
+    question: 'Do you have a dealer program?',
+    answer:
+      'Yes! We offer attractive dealer programs with exclusive territory rights, marketing support, technical training, and competitive pricing. Visit our Dealer page or contact us for details.',
+    category: 'Dealer',
+  },
+];

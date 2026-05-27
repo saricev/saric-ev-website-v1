@@ -1,0 +1,8 @@
+[
+  {"name": "Disney Parks", "logo": "/images/logos/client1.svg"},
+  {"name": "Hilton Hotels", "logo": "/images/logos/client2.svg"},
+  {"name": "Dubai Police", "logo": "/images/logos/client3.svg"},
+  {"name": "DHL Logistics", "logo": "/images/logos/client4.svg"},
+  {"name": "Universal Studios", "logo": "/images/logos/client5.svg"},
+  {"name": "Marriott", "logo": "/images/logos/client6.svg"}
+]
