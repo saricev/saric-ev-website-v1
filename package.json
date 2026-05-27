@@ -11,6 +11,7 @@
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "better-sqlite3": "^12.10.0",
+    "browser-image-compression": "^2.0.2",
     "cloudinary": "^2.10.0",
     "clsx": "^2.1.1",
     "jose": "^6.2.3",

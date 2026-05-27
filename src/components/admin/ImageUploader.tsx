@@ -2,6 +2,16 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
+import imageCompression from 'browser-image-compression';
+
+// Compression presets by image position
+const COMPRESSION_PRESETS: Record<string, { maxWidthOrHeight: number; maxSizeMB: number }> = {
+  products: { maxWidthOrHeight: 1600, maxSizeMB: 0.3 },      // product detail/gallery: 1600px, ≤300KB
+  blog:      { maxWidthOrHeight: 1200, maxSizeMB: 0.2 },      // blog cover: 1200px, ≤200KB
+  solutions: { maxWidthOrHeight: 1200, maxSizeMB: 0.25 },     // solution cards: 1200px, ≤250KB
+  clients:   { maxWidthOrHeight: 300,  maxSizeMB: 0.03 },     // client logos: 300px, ≤30KB
+  company:   { maxWidthOrHeight: 1200, maxSizeMB: 0.25 },     // company/about: 1200px, ≤250KB
+};
 
 interface ImageUploaderProps {
   value: string[];
@@ -25,8 +35,26 @@ export default function ImageUploader({
 
   const upload = useCallback(async (file: File) => {
     setError('');
+
+    // Compress before upload
+    const preset = COMPRESSION_PRESETS[folder] || COMPRESSION_PRESETS.products;
+    let compressedFile: File = file;
+
+    if (file.size > 100 * 1024) { // only compress files > 100KB
+      try {
+        compressedFile = await imageCompression(file, {
+          maxWidthOrHeight: preset.maxWidthOrHeight,
+          maxSizeMB: preset.maxSizeMB,
+          useWebWorker: true,
+          fileType: 'image/jpeg',
+        });
+      } catch {
+        // compression failed, use original
+      }
+    }
+
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', compressedFile);
     formData.append('folder', folder);
 
     const res = await fetch('/api/upload', {
