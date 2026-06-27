@@ -56,6 +56,10 @@ export async function getUserById(id: string): Promise<User | null> {
 }
 
 export async function createUser(username: string, password: string, role: string = 'viewer'): Promise<Omit<User, 'passwordHash'>> {
+  if (password.length < 8) {
+    throw new Error('Password must be at least 8 characters long');
+  }
+
   const db = getDb();
   const existing = db.prepare('SELECT id FROM users WHERE username = ?').get(username);
   if (existing) throw new Error('Username already exists');
@@ -202,6 +206,22 @@ export async function deleteRole(name: string): Promise<boolean> {
   return result.changes > 0;
 }
 
+// Role level helpers
+const ROLE_LEVELS: Record<string, number> = {
+  viewer: 1,
+  editor: 2,
+  admin: 3,
+  super_admin: 4,
+};
+
+export function getRoleLevel(role: string): number {
+  return ROLE_LEVELS[role] ?? 0;
+}
+
+export function canAssignRole(assignerRole: string, targetRole: string): boolean {
+  return getRoleLevel(assignerRole) > getRoleLevel(targetRole);
+}
+
 // Permission helpers
 export async function getPermissions(roleName: string): Promise<string[]> {
   const db = getDb();
@@ -240,5 +260,5 @@ export async function initializeDefaultAdmin(): Promise<void> {
 
   const defaultPassword = process.env.ADMIN_PASSWORD || 'admin123';
   await createUser('admin', defaultPassword, 'super_admin');
-  console.log('Default admin created. Username: admin, Password:', defaultPassword);
+  console.log('Default admin created. Username: admin');
 }

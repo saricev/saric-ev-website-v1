@@ -1,29 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyUser, createToken, initializeDefaultAdmin } from '@/lib/auth';
+import { createRateLimiter } from '@/lib/rate-limit';
 
-// Simple in-memory rate limiter for login attempts
-const loginAttempts = new Map<string, { count: number; resetAt: number }>();
-const MAX_ATTEMPTS = 5;
-const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = loginAttempts.get(ip);
-
-  if (!entry || now > entry.resetAt) {
-    loginAttempts.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return true;
-  }
-
-  if (entry.count >= MAX_ATTEMPTS) return false;
-  entry.count++;
-  return true;
-}
+const loginLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: 5 }); // 5 attempts per 15 min
 
 export async function POST(request: NextRequest) {
   try {
-    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
-    if (!checkRateLimit(ip)) {
+    const { success } = loginLimiter.check(request);
+    if (!success) {
       return NextResponse.json({ error: 'Too many login attempts. Try again later.' }, { status: 429 });
     }
 
@@ -39,9 +23,6 @@ export async function POST(request: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: 'Invalid credentials.' }, { status: 401 });
     }
-
-    // Clear rate limit on successful login
-    loginAttempts.delete(ip);
 
     const token = await createToken(user);
 
@@ -59,7 +40,8 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-  } catch {
+  } catch (err) {
+    console.error('Login error:', err);
     return NextResponse.json({ error: 'Internal server error.' }, { status: 500 });
   }
 }
