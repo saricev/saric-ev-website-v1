@@ -9,6 +9,14 @@ import { company } from '@/data/company';
 export const metadata: Metadata = {
   title: 'Contact Us',
   description: 'Get in touch with Saric for product inquiries, quotes, and dealer information.',
+  openGraph: {
+    title: 'Contact Us | Saric EV',
+    description: 'Get in touch with Saric for product inquiries, quotes, and dealer information.',
+    url: '/contact',
+  },
+  alternates: {
+    canonical: '/contact',
+  },
 };
 
 interface Props {
@@ -20,6 +28,24 @@ export default async function ContactPage({ searchParams }: Props) {
 
   return (
     <section className="py-12 bg-gray-50 min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ContactPage',
+            name: 'Contact Saric',
+            url: 'https://saricev.com/contact',
+            mainEntity: {
+              '@type': 'Organization',
+              name: company.name,
+              telephone: company.phone,
+              email: company.email,
+              address: { '@type': 'PostalAddress', addressLocality: company.address },
+            },
+          }),
+        }}
+      />
       <Container>
         <Breadcrumb items={[{ label: 'Contact Us' }]} />
         <SectionTitle
