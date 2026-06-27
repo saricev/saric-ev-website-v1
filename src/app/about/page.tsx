@@ -10,6 +10,14 @@ import { company } from '@/data/company';
 export const metadata: Metadata = {
   title: 'About Us',
   description: `Learn about ${company.name} - a leading low-speed electric vehicle manufacturer with ${company.exportCountries}+ export countries and ${company.factoryArea} factory.`,
+  openGraph: {
+    title: `About Us | ${company.name}`,
+    description: `Learn about ${company.name} - a leading low-speed electric vehicle manufacturer with ${company.exportCountries}+ export countries.`,
+    url: '/about',
+  },
+  alternates: {
+    canonical: '/about',
+  },
 };
 
 const milestones = [
@@ -58,6 +66,7 @@ export default function AboutPage() {
                 src="/images/about/factory.jpg"
                 alt="Saric Factory"
                 fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
               />
             </div>

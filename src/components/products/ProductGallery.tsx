@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { getOptimizedUrl } from '@/lib/cloudinary-utils';
 
 interface ProductGalleryProps {
   images: string[];
@@ -16,9 +17,11 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
       {/* Main image */}
       <div className="relative aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden">
         <Image
-          src={images[selected]}
+          src={getOptimizedUrl(images[selected])}
           alt={`${name} - Image ${selected + 1}`}
           fill
+          priority
+          sizes="(max-width: 1024px) 100vw, 50vw"
           className="object-cover"
         />
       </div>
@@ -35,9 +38,10 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
               }`}
             >
               <Image
-                src={img}
+                src={getOptimizedUrl(img)}
                 alt={`${name} - Thumbnail ${index + 1}`}
                 fill
+                sizes="80px"
                 className="object-cover"
               />
             </button>

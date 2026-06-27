@@ -26,6 +26,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: product.name,
     description: product.description,
+    openGraph: {
+      title: product.name,
+      description: product.description,
+      type: 'website',
+      url: `/products/${slug}`,
+      images: product.images?.[0] ? [{ url: product.images[0], width: 1200, height: 800, alt: product.name }] : [],
+    },
+    alternates: {
+      canonical: `/products/${slug}`,
+    },
   };
 }
 
@@ -36,6 +46,28 @@ export default async function ProductDetailPage({ params }: Props) {
 
   return (
     <section className="py-12 bg-gray-50 min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: product.name,
+            description: product.description,
+            image: product.images,
+            brand: { '@type': 'Brand', name: 'Saric' },
+            manufacturer: { '@type': 'Organization', name: 'Saric' },
+            category: product.category,
+            sku: product.slug,
+            offers: {
+              '@type': 'Offer',
+              priceCurrency: 'USD',
+              availability: 'https://schema.org/InStock',
+              seller: { '@type': 'Organization', name: 'Saric' },
+            },
+          }),
+        }}
+      />
       <Container>
         <Breadcrumb
           items={[

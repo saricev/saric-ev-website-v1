@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import Container from '@/components/layout/Container';
 import SectionTitle from '@/components/ui/SectionTitle';
 import Badge from '@/components/ui/Badge';
+import { getOptimizedUrl } from '@/lib/cloudinary-utils';
 import { Product } from '@/types';
 
 export default function FeaturedProducts({ products }: { products: Product[] }) {
@@ -25,9 +26,10 @@ export default function FeaturedProducts({ products }: { products: Product[] }) 
             >
               <div className="relative aspect-[4/3] bg-gray-100">
                 <Image
-                  src={product.images[0]}
+                  src={getOptimizedUrl(product.images[0])}
                   alt={product.name}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>

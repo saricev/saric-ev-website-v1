@@ -7,6 +7,7 @@ import Container from '@/components/layout/Container';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import Badge from '@/components/ui/Badge';
 import BlogContent from '@/components/blog/BlogContent';
+import { getOptimizedUrl } from '@/lib/cloudinary-utils';
 import { getBlogPosts, getBlogPostBySlug } from '@/lib/data';
 
 interface Props {
@@ -25,6 +26,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: post.title,
     description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: 'article',
+      url: `/blog/${slug}`,
+      images: [{ url: post.image, width: 1200, height: 675, alt: post.title }],
+      publishedTime: post.date,
+      authors: [post.author],
+    },
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
   };
 }
 
@@ -35,6 +48,21 @@ export default async function BlogDetailPage({ params }: Props) {
 
   return (
     <section className="py-12 bg-gray-50 min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: post.title,
+            image: post.image,
+            datePublished: post.date,
+            author: { '@type': 'Person', name: post.author },
+            publisher: { '@type': 'Organization', name: 'Saric' },
+            description: post.excerpt,
+          }),
+        }}
+      />
       <Container>
         <Breadcrumb
           items={[
@@ -45,7 +73,7 @@ export default async function BlogDetailPage({ params }: Props) {
 
         <article className="max-w-3xl mx-auto">
           <div className="relative aspect-[16/9] rounded-xl overflow-hidden mb-8">
-            <Image src={post.image} alt={post.title} fill className="object-cover" />
+            <Image src={getOptimizedUrl(post.image)} alt={post.title} fill priority sizes="(max-width: 768px) 100vw, 768px" className="object-cover" />
           </div>
 
           <div className="flex items-center gap-4 mb-4">
