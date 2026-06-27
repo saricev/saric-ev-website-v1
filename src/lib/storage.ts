@@ -12,6 +12,14 @@ function validateTable(table: string): void {
   }
 }
 
+const COLUMN_PATTERN = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+
+function validateColumn(name: string): void {
+  if (!COLUMN_PATTERN.test(name)) {
+    throw new Error(`Invalid column name: ${name}`);
+  }
+}
+
 // Generic CRUD operations backed by SQLite
 
 export async function readFromJson<T>(table: string): Promise<T[]> {
@@ -45,6 +53,7 @@ export async function writeToJson<T>(table: string, data: T[]): Promise<void> {
 
   const firstItem = data[0] as Record<string, unknown>;
   const columns = Object.keys(firstItem);
+  columns.forEach(validateColumn);
   const placeholders = columns.map(() => '?').join(', ');
   const insert = db.prepare(`INSERT INTO ${table} (${columns.join(', ')}) VALUES (${placeholders})`);
 
@@ -66,6 +75,7 @@ export async function saveToJson<T extends Record<string, unknown>>(table: strin
 
   const itemWithMeta = { ...data, id, timestamp: now, read: 0, note: '' };
   const columns = Object.keys(itemWithMeta);
+  columns.forEach(validateColumn);
   const placeholders = columns.map(() => '?').join(', ');
   const values = columns.map((col) => {
     const val = itemWithMeta[col];
@@ -85,6 +95,7 @@ export async function updateInJson<T extends { id: string }>(table: string, id: 
 
   for (const [key, value] of Object.entries(updates)) {
     if (key === 'id') continue;
+    validateColumn(key);
     sets.push(`${key} = ?`);
     values.push(typeof value === 'object' && value !== null ? JSON.stringify(value) : value);
   }
