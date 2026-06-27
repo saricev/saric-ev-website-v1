@@ -57,7 +57,7 @@ export default function Header() {
                   {item.children && <ChevronDown className="ml-1 w-4 h-4" />}
                 </Link>
                 {item.children && openDropdown === item.label && (
-                  <div className="absolute top-full left-0 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2 mt-1">
+                  <div className="absolute top-full left-0 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2">
                     {item.children.map((child) => (
                       <Link
                         key={child.href}

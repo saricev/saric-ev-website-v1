@@ -9,7 +9,7 @@ interface SolutionCardProps {
 
 export default function SolutionCard({ solution, reverse = false }: SolutionCardProps) {
   return (
-    <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 items-center ${reverse ? 'lg:flex-row-reverse' : ''}`}>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
       <div className={`relative aspect-[16/10] rounded-xl overflow-hidden ${reverse ? 'lg:order-2' : ''}`}>
         <Image
           src={solution.image}
