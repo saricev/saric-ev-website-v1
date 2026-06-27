@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Metadata } from 'next';
 import Container from '@/components/layout/Container';
 import SectionTitle from '@/components/ui/SectionTitle';
@@ -22,7 +23,9 @@ export default async function ProductsPage() {
           subtitle="Explore our complete range of low-speed electric vehicles for every application."
           centered={false}
         />
-        <ProductsClient products={products} />
+        <Suspense fallback={<div className="h-16 bg-gray-100 rounded-lg animate-pulse mb-8" />}>
+          <ProductsClient products={products} />
+        </Suspense>
       </Container>
     </section>
   );

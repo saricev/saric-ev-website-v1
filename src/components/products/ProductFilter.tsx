@@ -24,10 +24,11 @@ export default function ProductFilter({
   onSeatsChange,
 }: ProductFilterProps) {
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="flex flex-wrap gap-3" role="group" aria-label="Product filters">
       {/* Category filters */}
       <button
         onClick={() => onCategoryChange('')}
+        aria-pressed={selectedCategory === ''}
         className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
           selectedCategory === ''
             ? 'bg-primary text-white'
@@ -40,6 +41,7 @@ export default function ProductFilter({
         <button
           key={cat.id}
           onClick={() => onCategoryChange(cat.id)}
+          aria-pressed={selectedCategory === cat.id}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             selectedCategory === cat.id
               ? 'bg-primary text-white'
@@ -51,13 +53,14 @@ export default function ProductFilter({
       ))}
 
       {/* Divider */}
-      <div className="w-px bg-gray-300 mx-1 hidden sm:block" />
+      <div className="w-px bg-gray-300 mx-1 hidden sm:block" aria-hidden="true" />
 
       {/* Seat filters */}
       {seatOptions.map((opt) => (
         <button
           key={opt.value}
           onClick={() => onSeatsChange(opt.value)}
+          aria-pressed={selectedSeats === opt.value}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             selectedSeats === opt.value
               ? 'bg-primary text-white'
