@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Clock } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
+import { getOptimizedUrl } from '@/lib/cloudinary-utils';
 import { BlogPost } from '@/types';
 
 interface BlogCardProps {
@@ -16,9 +17,10 @@ export default function BlogCard({ post }: BlogCardProps) {
     >
       <div className="relative aspect-[16/9] bg-gray-100">
         <Image
-          src={post.image}
+          src={getOptimizedUrl(post.image)}
           alt={post.title}
           fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover group-hover:scale-105 transition-transform duration-300"
         />
       </div>

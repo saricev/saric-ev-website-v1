@@ -1,5 +1,8 @@
 import { v2 as cloudinary } from 'cloudinary';
 
+// Re-export getOptimizedUrl for server-side usage
+export { getOptimizedUrl } from './cloudinary-utils';
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME || '',
   api_key: process.env.CLOUDINARY_API_KEY || '',
@@ -46,21 +49,3 @@ export async function deleteImage(publicId: string): Promise<boolean> {
   }
 }
 
-export function getOptimizedUrl(
-  url: string,
-  options: { width?: number; height?: number; quality?: string } = {}
-): string {
-  if (!url.includes('cloudinary.com')) return url;
-
-  // Apply transformations via URL params
-  const transformations: string[] = [];
-  if (options.width) transformations.push(`w_${options.width}`);
-  if (options.height) transformations.push(`h_${options.height}`);
-  transformations.push(`q_${options.quality || 'auto'}`);
-  transformations.push('f_auto');
-
-  const transformStr = transformations.join(',');
-
-  // Insert transformation into Cloudinary URL
-  return url.replace('/upload/', `/upload/${transformStr}/`);
-}
