@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyUser, createToken, initializeDefaultAdmin } from '@/lib/auth';
 import { createRateLimiter } from '@/lib/rate-limit';
+import { logger } from '@/lib/logger';
 
 const loginLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: 5 }); // 5 attempts per 15 min
 
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (err) {
-    console.error('Login error:', err);
+    logger.error('api/auth/login', 'POST failed', err);
     return NextResponse.json({ error: 'Internal server error.' }, { status: 500 });
   }
 }

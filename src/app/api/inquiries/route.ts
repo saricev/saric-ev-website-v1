@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getInquiries } from '@/lib/data';
 import { requirePermission } from '@/lib/permissions';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,7 +11,7 @@ export async function GET(request: NextRequest) {
     const inquiries = await getInquiries();
     return NextResponse.json(inquiries);
   } catch (err) {
-    console.error('Inquiries GET error:', err);
+    logger.error('api/inquiries', 'GET failed', err);
     return NextResponse.json({ error: 'Internal server error.' }, { status: 500 });
   }
 }

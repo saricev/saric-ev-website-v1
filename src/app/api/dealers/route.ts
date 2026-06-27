@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDealerApplications } from '@/lib/data';
 import { requirePermission } from '@/lib/permissions';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,7 +11,7 @@ export async function GET(request: NextRequest) {
     const dealers = await getDealerApplications();
     return NextResponse.json(dealers);
   } catch (err) {
-    console.error('Dealers GET error:', err);
+    logger.error('api/dealers', 'GET failed', err);
     return NextResponse.json({ error: 'Internal server error.' }, { status: 500 });
   }
 }

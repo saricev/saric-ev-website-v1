@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { saveToJson } from '@/lib/storage';
 import { sendEmail, buildInquiryEmailHtml } from '@/lib/email';
 import { createRateLimiter } from '@/lib/rate-limit';
+import { logger } from '@/lib/logger';
 
 const limiter = createRateLimiter({ windowMs: 60 * 60 * 1000, max: 10 }); // 10 per hour per IP
 
@@ -50,7 +51,7 @@ export async function POST(request: NextRequest) {
     response.headers.set('X-RateLimit-Remaining', String(remaining));
     return response;
   } catch (err) {
-    console.error('Contact POST error:', err);
+    logger.error('api/contact', 'POST failed', err);
     return NextResponse.json({ error: 'Internal server error.' }, { status: 500 });
   }
 }

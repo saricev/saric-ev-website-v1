@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { uploadImage, deleteImage } from '@/lib/cloudinary';
 import { verifyAuth } from '@/lib/auth-edge';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
   try {
@@ -44,7 +45,7 @@ export async function POST(request: NextRequest) {
       publicId: result.publicId,
     });
   } catch (err) {
-    console.error('Upload error:', err);
+    logger.error('api/upload', 'Upload failed', err);
     return NextResponse.json({ error: 'Upload failed.' }, { status: 500 });
   }
 }

@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 interface EmailData {
   to: string;
   subject: string;
@@ -18,7 +20,7 @@ export async function sendEmail(data: EmailData): Promise<boolean> {
   const fromEmail = process.env.FROM_EMAIL || 'noreply@saricev.com';
 
   if (!apiKey) {
-    console.warn('RESEND_API_KEY not configured, skipping email send');
+    logger.warn('email', 'RESEND_API_KEY not configured, skipping email send');
     return false;
   }
 
@@ -39,7 +41,7 @@ export async function sendEmail(data: EmailData): Promise<boolean> {
 
     return response.ok;
   } catch (error) {
-    console.error('Failed to send email:', error);
+    logger.error('email', 'Failed to send email', error);
     return false;
   }
 }
